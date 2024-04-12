@@ -186,11 +186,14 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
   args.forEach((arg) => {
     f = f(arg);
-  }); // let f = fn;
+  }); // let f = fn; const f = (...args2) => fn(fn(args1), args2);
   // f = fn(args[0]);
  */
 function partialUsingArguments(fn, ...args1) {
-  const f = (...args2) => fn(args1, args2);
+  let f = fn;
+  args1.forEach((arg) => {
+    f = () => f(arg);
+  });
   return f;
 }
 
