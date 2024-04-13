@@ -176,12 +176,14 @@ function retry(func, attempts) {
  * log from console.log:
  * cos(3.141592653589793) starts
  * cos(3.141592653589793) ends
- *  return () => {
-    return `${logFunc(func())} start`;
-   };
+ *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return (...args) => {
+    logFunc(`${func.name}(${args}) starts`);
+    logFunc(`${func.name}(${args}) ends`);
+    return func(...args);
+  };
 }
 
 /**
