@@ -176,13 +176,21 @@ function retry(func, attempts) {
  * log from console.log:
  * cos(3.141592653589793) starts
  * cos(3.141592653589793) ends
- *
+ * JSON.stringify(args)
  */
 function logger(func, logFunc) {
   return (...args) => {
-    logFunc(`${func.name}(${args}) starts`);
-    logFunc(`${func.name}(${args}) ends`);
-    return func(...args);
+    let sArgs = '';
+    args.forEach((arg) => {
+      if (typeof arg === 'object') sArgs += `${JSON.stringify(arg)},`;
+      else sArgs += `${arg},`;
+    });
+    sArgs = sArgs.slice(0, -1);
+
+    logFunc(`${func.name}(${sArgs}) starts`);
+    const res = func(...args);
+    logFunc(`${func.name}(${sArgs}) ends`);
+    return res;
   };
 }
 
